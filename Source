@@ -113,7 +113,7 @@ ImageButton.Position = UDim2.new(0.218742043, 0, -0.155235752, 0)
 ImageButton.Size = UDim2.new(0, 64, 0, 64)
 
 -- Set initial image to "open"
-ImageButton.Image = "rbxassetid://136634905225382" -- Open image asset ID
+ImageButton.Image = "rbxassetid://7129155278" -- Open image asset ID
 local isOpen = true -- Variable to track the state
 
 ImageButton.MouseButton1Click:Connect(function()
@@ -125,9 +125,9 @@ ImageButton.MouseButton1Click:Connect(function()
 
     -- Toggle the image based on the state
     if isOpen then
-        ImageButton.Image = "rbxassetid://134717468347051" -- Replace with close image asset ID
+        ImageButton.Image = "rbxassetid://7205866972" -- Replace with close image asset ID
     else
-        ImageButton.Image = "rbxassetid://136634905225382" -- Open image asset ID
+        ImageButton.Image = "rbxassetid://7129155278" -- Open image asset ID
     end
     isOpen = not isOpen -- Toggle the state
 
@@ -3052,7 +3052,7 @@ local Tap = {
 	General = Window:AddTab({Title = "Generals", Icon = "box"}),
 	Event = Window:AddTab({Title = "Event", Icon = "star"}),
 	Player = Window:AddTab({ Title = "Player", Icon = "user"}),
-	Shop = Window:AddTab({ Title = "Shopee", Icon = "shopping-bag"}),
+	Shop = Window:AddTab({ Title = "Shop", Icon = "shopping-bag"}),
 	Configs = Window:AddTab({Title = "Configs", Icon = "diamond"}),
 	Teleport = Window:AddTab({Title = "Teleport", Icon = "asterisk"}),
 	Settings = Window:AddTab({Title = "Settings", Icon = "settings"})
@@ -3207,8 +3207,8 @@ end
 
 
 AllFuncs['Sell Fish'] = function()
-	while Config['Sell Fish'] and task.wait(3) do
-		game:GetService("ReplicatedStorage"):WaitForChild("events"):WaitForChild("selleverything"):InvokeServer()
+	while Config['Sell Fish'] and task.wait(1) do
+		game:GetService("ReplicatedStorage"):WaitForChild("events"):WaitForChild("selleverything"):FireServer()
 	end
 end
 
@@ -3453,15 +3453,8 @@ Main = Tap.General:AddSection('General') do
 	SelectPosition = Main:AddParagraph({        
 		Title = "Position : N/A"
 	})
-	Toggle(Main, "Auto Farm Fish","", "Farm Fish")
-	Toggle(Main, "Teleport To Select Position","", "To Pos Stand")
-	Main:AddButton({
-		Title = "Select Position",
-		Callback = function()
-			Config['SelectPositionStand'] = LocalPlayer.Character:FindFirstChild("HumanoidRootPart").CFrame
-			SelectPosition:SetTitle("Position : "..tostring(math.floor(LocalPlayer.Character:FindFirstChild("HumanoidRootPart").Position.X)).." X "..tostring(math.floor(LocalPlayer.Character:FindFirstChild("HumanoidRootPart").Position.Y)).." Y "..tostring(math.floor(LocalPlayer.Character:FindFirstChild("HumanoidRootPart").Position.Z)).." Z")
-		end
-	})
+	Toggle(Main, "Auto Fish","", "Farm Fish")
+	
 end
 IngredientList = {}
 for i,v in pairs(workspace.active:GetDescendants()) do
@@ -3602,39 +3595,7 @@ AllFuncs['Auto Find Boat Event'] = function()
 		end
 	end
 end
-Event = Tap.Event:AddSection('Event') do
-	IngredientDropdwon = Dropdown(Event, "Select Ingredient", "", IngredientList, false, "Ingredient Select")
-	Toggle(Event, "Auto Halloween Event ","", "Auto Find Boat Event")
-	Toggle(Event, "Back To Auto Fishing","", "Back To Fishing")
-	Toggle(Event, "Hop Server","Hop Server For Not Found Ingredient", "Hop Not Found Ingredient")
-	Event:AddButton({
-		Title = "Teleport To Ingredient",
-		Callback = function()
-			if Config['Ingredient Select'] == "" then
-				Notify("Pls Select Ingredient ")
-				return
-			end
-			for i,v in pairs(workspace.active:GetChildren()) do
-				if v.Name == Config['Ingredient Select'] then
-					if v:FindFirstChildOfClass("MeshPart") then
-						if v:FindFirstChildOfClass("MeshPart").Position.X > 200 then
-							continue
-						end
-					end
-					LocalPlayer.Character:FindFirstChild("HumanoidRootPart").CFrame = v:GetPivot()
-				end
-			end
-			Notify("Not Found `"..Config["Ingredient Select"].."` ")
-		end
-	})
-	
-	Event:AddButton({
-		Title = "Refresh Ingredient",
-		Callback = function()
-			IngredientDropdwon:SetValues(IngredientList)
-		end
-	})
-end
+
 
 Seller = Tap.General:AddSection('Seller') do
 	Toggle(Seller, "Auto Sell Fish","", "Sell Fish")
@@ -3642,13 +3603,13 @@ Seller = Tap.General:AddSection('Seller') do
 	Seller:AddButton({
 		Title = "Sell All Fish",
 		Callback = function()
-			ReplicatedStorage:WaitForChild("events"):WaitForChild("selleverything"):InvokeServer()
+			ReplicatedStorage:WaitForChild("events"):WaitForChild("selleverything"):FireServer()
 		end
 	})
 	Seller:AddButton({
 		Title = "Sell Fish ( In Hand )",
 		Callback = function()
-			workspace.world.npcs:FindFirstChild("Marc Merchant").merchant.sell:InvokeServer()
+			workspace.world.npcs:FindFirstChild("Marc Merchant").merchant.sell:FireServer()
 		end
 	})
 	Seller:AddButton({
